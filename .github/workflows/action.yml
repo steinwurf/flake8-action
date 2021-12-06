@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
-      - name: Check Python syntax (With ignore)
+      - name: Check Python syntax
         env:
           EXCLUDED_ERRORS: ${{ inputs.excluded_errors }}
         # if: ${{ env.EXCLUDED_ERRORS != '' }}
