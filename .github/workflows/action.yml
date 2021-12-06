@@ -24,14 +24,9 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
-      - name: Create Flake file
+      - name: Check Python syntax (With ignore)
         env:
           EXCLUDED_ERRORS: ${{ inputs.excluded_errors }}
-        if: ${{ env.EXCLUDED_ERRORS != '' }}
-        run: |
-          touch .flake8
-          echo "[flake8]\n\nignore = ${{ env.EXCLUDED_ERRORS }}" >> .flake8
-      - run: ls
-      - name: Check Python syntax
+        # if: ${{ env.EXCLUDED_ERRORS != '' }}
         # Inspired by https://github.com/cclauss/Find-Python-syntax-errors-action/blob/master/Dockerfile
-        run: flake8 . --count --select=E9,F63,F72,F82 --show-source --statistics
+        run: flake8 . --count --select=E9,F63,F72,F82 --ignore=${{ env.EXCLUDED_ERRORS }} --show-source --statistics
