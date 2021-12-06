@@ -1,0 +1,34 @@
+name: Flake8
+on:
+  workflow_call:
+    inputs:
+      excluded_errors:
+        description: "Excluded Errors"
+        type: string
+        required: false
+jobs:
+  Flake8:
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - container: ghcr.io/steinwurf/flake8-4:1.0.0
+            name: Flake8 4.0.1
+    runs-on: [self-hosted, docker, builder]
+    name: ${{ matrix.config.name }}
+    container:
+      image: ${{ matrix.config.container }}
+      options: --user 0:0
+      volumes:
+        - /home/buildbot/.ssh:/root/.ssh
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: Create Flake file
+        env:
+          EXCLUDED_ERRORS: ${{ inputs.excluded_errors }}
+        if: ${{ [ -z "${EXCLUDED_ERRORS}" ] }}
+        run: echo "[flake8]\n\nignore = ${{ env.EXCLUDED_ERRORS }}" >> .flake8
+      - name: Check Python syntax
+        # Inspired by https://github.com/cclauss/Find-Python-syntax-errors-action/blob/master/Dockerfile
+        run: flake8 . --count --select=E9,F63,F72,F82 --show-source --statistics
