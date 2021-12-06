@@ -28,7 +28,9 @@ jobs:
         env:
           EXCLUDED_ERRORS: ${{ inputs.excluded_errors }}
         if: ${{ env.EXCLUDED_ERRORS != '' }}
-        run: echo "[flake8]\n\nignore = ${{ env.EXCLUDED_ERRORS }}" >> .flake8
+        run: |
+          touch .flake8
+          echo "[flake8]\n\nignore = ${{ env.EXCLUDED_ERRORS }}" >> .flake8
       - run: ls
       - name: Check Python syntax
         # Inspired by https://github.com/cclauss/Find-Python-syntax-errors-action/blob/master/Dockerfile
