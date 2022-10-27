@@ -8,6 +8,10 @@ Latest
 ------
 * tbd
 
+2.0.0
+-----
+* Major: Upgraded actions/checkout to v3
+
 1.0.0
 -----
 * Major: Initital release.
